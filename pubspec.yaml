@@ -1,19 +1,18 @@
 name: get_test
 description: A package that facilitates the creation of tests for applications built with GetX
-version: 3.13.0
+version: 4.0.0
 homepage: https://github.com/jonataslaw/getx
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=2.8.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  mockito: ">=3.0.0 <5.0.0"
-  get_navigation: ">=3.13.0 <4.0.0"
-  get_state_manager: ">=3.13.0 <4.0.0"
-  meta: ">=1.1.0 <2.0.0"
+  mockito: ">=5.0.17 <6.0.0"
+  get: ">=4.0.0 <5.0.0"
+  meta: ">=1.7.0 <2.0.0"
   flutter_test:
     sdk: flutter
 

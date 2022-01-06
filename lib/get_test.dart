@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_navigation/get_navigation.dart';
-import 'package:get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+
 import 'utils/image_test.dart'
     if (dart.library.io) 'utils/image_test_utils.dart';
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
-  final List<GetPage> getPages;
-  final String initialRoute;
+  final List<GetPage>? getPages;
+  final String? initialRoute;
 
   const _Wrapper({
-    Key key,
+    Key? key,
     this.child = const Scaffold(),
     this.getPages,
     this.initialRoute,
@@ -32,28 +32,28 @@ class _Wrapper extends StatelessWidget {
 void testController<T>(
   String description,
   void Function(T) callback, {
-  @required T controller,
-  void Function(T) onInit,
-  void Function(T) onReady,
-  void Function(T) onClose,
+  required T controller,
+  void Function(T)? onInit,
+  void Function(T)? onReady,
+  void Function(T)? onClose,
 }) {
   test(description, () {
-    onInit(controller);
-    SchedulerBinding.instance.addPostFrameCallback((f) {
-      onReady(controller);
+    onInit?.call(controller);
+    SchedulerBinding.instance?.addPostFrameCallback((f) {
+      onReady?.call(controller);
     });
     callback(controller);
-    onClose(controller);
+    onClose?.call(controller);
   });
 }
 
 @isTest
 Future<T> testGetX<T extends DisposableInterface>(
   String description, {
-  @required GetX<T> widget,
-  @required void Function(T controller) test,
+  required GetX<T> widget,
+  required void Function(T controller) test,
 }) async {
-  T controller;
+  T? controller;
   testWidgets(description, (tester) async {
     provideMockedNetworkImages(() async {
       await tester.pumpWidget(GetMaterialApp(home: widget));
@@ -61,16 +61,16 @@ Future<T> testGetX<T extends DisposableInterface>(
       test(controller);
     });
   });
-  return controller;
+  return controller!;
 }
 
 @isTest
 Future<T> testGetBuilder<T extends GetxController>(
   String description, {
-  @required GetBuilder<T> widget,
-  @required void Function(T controller) test,
+  required GetBuilder<T> widget,
+  required void Function(T controller) test,
 }) async {
-  T controller;
+  T? controller;
   testWidgets(description, (tester) async {
     provideMockedNetworkImages(() async {
       await tester.pumpWidget(GetMaterialApp(home: widget));
@@ -78,15 +78,15 @@ Future<T> testGetBuilder<T extends GetxController>(
       test(controller);
     });
   });
-  return controller;
+  return controller!;
 }
 
 @isTest
 Future<T> testObx<T extends GetxController>(
   String description, {
-  @required T controller,
-  @required Obx Function(T controller) widget,
-  @required void Function(T controller) test,
+  required T controller,
+  required Obx Function(T controller) widget,
+  required void Function(T controller) test,
 }) async {
   testWidgets(description, (tester) async {
     provideMockedNetworkImages(() async {
@@ -100,24 +100,23 @@ Future<T> testObx<T extends GetxController>(
 @isTest
 void getTest(
   String description, {
-  @required WidgetTesterCallback widgetTest,
-  Widget wrapper,
-  List<GetPage> getPages,
+  required WidgetTesterCallback widgetTest,
+  Widget? wrapper,
+  List<GetPage>? getPages,
   String initialRoute = '/',
   bool skip = false,
-  Timeout timeout,
-  Duration initialTimeout,
+  Timeout? timeout,
+  Duration? initialTimeout,
   bool semanticsEnabled = true,
-  TestVariant<Object> variant = const DefaultTestVariant(),
+  TestVariant<Object?> variant = const DefaultTestVariant(),
   dynamic tags,
 }) {
-  assert(variant != null);
   assert(variant.values.isNotEmpty);
 
   if (wrapper == null) {
     if (getPages != null) {
       wrapper = _Wrapper(getPages: getPages, initialRoute: initialRoute);
-    } else if (initialRoute != null && getPages != null) {
+    } else if (getPages != null) {
       wrapper = _Wrapper(initialRoute: initialRoute, getPages: getPages);
     } else {
       wrapper = _Wrapper();
@@ -128,13 +127,12 @@ void getTest(
     description,
     (tester) async {
       provideMockedNetworkImages(() async {
-        await tester.pumpWidget(wrapper);
+        await tester.pumpWidget(wrapper!);
         widgetTest(tester);
       });
     },
     skip: skip,
     timeout: timeout,
-    initialTimeout: initialTimeout,
     semanticsEnabled: semanticsEnabled,
     variant: variant,
     tags: tags,
