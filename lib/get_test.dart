@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:get_test/utils/image_test.dart';
 import 'package:meta/meta.dart';
 
-import 'utils/image_test.dart'
-    if (dart.library.io) 'utils/image_test_utils.dart';
+import 'package:get_test/utils/image_test_utils.dart';
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
@@ -48,7 +48,7 @@ void testController<T>(
 }
 
 @isTest
-Future<T> testGetX<T extends DisposableInterface>(
+Future<T?> testGetX<T extends DisposableInterface>(
   String description, {
   required GetX<T> widget,
   required void Function(T controller) test,
@@ -61,11 +61,11 @@ Future<T> testGetX<T extends DisposableInterface>(
       test(controller);
     });
   });
-  return controller!;
+  return controller;
 }
 
 @isTest
-Future<T> testGetBuilder<T extends GetxController>(
+Future<T?> testGetBuilder<T extends GetxController>(
   String description, {
   required GetBuilder<T> widget,
   required void Function(T controller) test,
@@ -78,7 +78,7 @@ Future<T> testGetBuilder<T extends GetxController>(
       test(controller);
     });
   });
-  return controller!;
+  return controller;
 }
 
 @isTest
