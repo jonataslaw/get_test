@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:get_test/utils/image_test.dart';
 import 'package:meta/meta.dart';
 
-import 'package:get_test/utils/image_test_utils.dart';
+import 'utils/image_test.dart';
+
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
@@ -39,7 +46,7 @@ void testController<T>(
 }) {
   test(description, () {
     onInit?.call(controller);
-    SchedulerBinding.instance?.addPostFrameCallback((f) {
+    _ambiguate(SchedulerBinding.instance)?.addPostFrameCallback((f) {
       onReady?.call(controller);
     });
     callback(controller);
