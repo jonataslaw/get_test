@@ -4,8 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-import 'utils/image_test.dart'
-    if (dart.library.io) 'utils/image_test_utils.dart';
+import 'utils/image_test.dart';
+
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
 
 class _Wrapper extends StatelessWidget {
   final Widget child;
@@ -39,7 +46,7 @@ void testController<T>(
 }) {
   test(description, () {
     onInit?.call(controller);
-    SchedulerBinding.instance?.addPostFrameCallback((f) {
+    _ambiguate(SchedulerBinding.instance)?.addPostFrameCallback((f) {
       onReady?.call(controller);
     });
     callback(controller);
@@ -48,7 +55,7 @@ void testController<T>(
 }
 
 @isTest
-Future<T> testGetX<T extends DisposableInterface>(
+Future<T?> testGetX<T extends DisposableInterface>(
   String description, {
   required GetX<T> widget,
   required void Function(T controller) test,
@@ -61,11 +68,11 @@ Future<T> testGetX<T extends DisposableInterface>(
       test(controller);
     });
   });
-  return controller!;
+  return controller;
 }
 
 @isTest
-Future<T> testGetBuilder<T extends GetxController>(
+Future<T?> testGetBuilder<T extends GetxController>(
   String description, {
   required GetBuilder<T> widget,
   required void Function(T controller) test,
@@ -78,7 +85,7 @@ Future<T> testGetBuilder<T extends GetxController>(
       test(controller);
     });
   });
-  return controller!;
+  return controller;
 }
 
 @isTest
